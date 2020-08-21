@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO list</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+    <div class="alert alert-success" id="alert" role="alert">
+        This is a success alert—check it out!
+    </div>
+    
+    <div id="overlay"></div>
+    <div id="modalSignUp" class="modal_div">
+        <span id="modalSignUpClose" class="modal_close">&times;</span>
+        <div class="wrapperForm">
+            <input placeholder="You should enter your email!" class="textbox" type="email" />
+            <input placeholder="You should enter your password" class="textbox password1" type="password" required />
+            <input placeholder="Repeat your password" class="textbox password2" type="password"/>            
+            <button  id="signUpButton">Sign up</button>
+        </div>
+    </div>
+    <div id="modalSignIn" class="modal_div">
+        <span id="modalSignInClose" class="modal_close">&times;</span>
+        <div class="wrapperForm">
+            <input placeholder="You should enter your email!" class="textbox" type="email" />
+            <input placeholder="You should enter your password" class="textbox password1" type="password" required />           
+            <button  id="signInButton">Sign in</button>
+        </div>
+    </div>
+    
+    <main>
+        <h1>Simple todo lists</h1>
+        <h3>from ruby garage</h3>
+        <div class="wrapper" id="wrapper">
+        </div>
+        <input type="text" placeholder="input new name of project" id="addTodoInput">  
+        <button id="addTodoButton">add TODO list</button>
+    </main>
+    <script src="https://kit.fontawesome.com/836505a428.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/public/js/render.js"></script>
+    <script src="/public/js/projectManager.js"></script>
+    <script src="/public/js/taskManager.js"></script>
+    <script src="/public/js/script.js"></script>
+</body>
+
+</html>

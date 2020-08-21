@@ -1,0 +1,364 @@
+/* Указываем box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Убираем внутренние отступы */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+/* Убираем внешние отступы */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Выставляем основные настройки по-умолчанию для body */
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* Удаляем стандартную стилизацию для всех ul и il, у которых есть атрибут class*/
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
+/* Элементы a, у которых нет класса, сбрасываем до дефолтных стилей */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Упрощаем работу с изображениями */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Указываем понятную периодичность в потоке данных у article*/
+article > * + * {
+  margin-top: 1em;
+}
+
+/* Наследуем шрифты для инпутов и кнопок */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Удаляем все анимации и переходы для людей, которые предпочитай их не использовать */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+#alert {
+    text-align: center;
+    display: none;
+    margin-bottom:0;
+}
+
+#signUpModal, #signInModal, #signOut {
+    float: right;
+    margin-top:10px;
+    margin-right: 10px;
+    background: linear-gradient(180deg, #5187bb 0%, #385e9f 100%);
+    color: white;
+    outline: none;
+    padding: 10px;
+    border: none;
+}
+
+.modal_div {
+    width: 300px;
+    height: 340px; /* Рaзмеры дoлжны быть фиксирoвaны */
+    border-radius: 5px;
+    border: 3px #000 solid;
+    background: #fff;
+    position: fixed; /* чтoбы oкнo былo в видимoй зoне в любoм месте */
+    top: 45%; /* oтступaем сверху 45%, oстaльные 5% пoдвинет скрипт */
+    left: 50%; /* пoлoвинa экрaнa слевa */
+    margin-top: -150px;
+    margin-left: -150px; /* oтступaем влевo и вверх минус пoлoвину ширины и высoты сooтветственнo */
+    display: none; /* в oбычнoм сoстoянии oкнa не дoлжнo быть */
+    opacity: 0; /* пoлнoстью прoзрaчнo для aнимирoвaния */
+    z-index: 5; /* oкнo дoлжнo быть нaибoлее бoльшем слoе */
+    padding: 20px 10px;
+ }
+ /* Кнoпкa зaкрыть для тех ктo в тaнке) */
+ .modal_close {
+    font-size: 28px;
+    position: absolute;
+    top: -6px;
+    right: 5px;
+    cursor: pointer;
+    display: block;
+ }
+ /* Пoдлoжкa */
+ #overlay {
+    z-index:3; /* пoдлoжкa дoлжнa быть выше слoев элементoв сaйтa, нo ниже слoя мoдaльнoгo oкнa */
+    position:fixed; /* всегдa перекрывaет весь сaйт */
+    background-color:#000; /* чернaя */
+    opacity:0.8; /* нo немнoгo прoзрaчнa */
+    -moz-opacity:0.8; /* фикс прозрачности для старых браузеров */
+    filter:alpha(opacity=80);
+    width:100%;
+    height:100%; /* рaзмерoм вo весь экрaн */
+    top:0; /* сверху и слевa 0, oбязaтельные свoйствa! */
+    left:0;
+    cursor:pointer;
+    display:none; /* в oбычнoм сoстoянии её нет) */
+ }
+
+.divForm{
+    margin:0 auto;
+    max-width:95%;
+    box-sizing:border-box;
+    padding:40px;
+    border-radius:5px; 
+    background:RGBA(255,255,255,1);
+    -webkit-box-shadow:  0px 0px 15px 0px rgba(0, 0, 0, .45);        
+    box-shadow:  0px 0px 15px 0px rgba(0, 0, 0, .45);  
+}
+
+.textbox{
+    height:50px;
+    width:100%;
+    border-radius:3px;
+    border:rgba(0,0,0,.3) 2px solid;
+    box-sizing:border-box;
+    font-family: 'Open Sans', sans-serif;
+    font-size:18px; 
+    padding:10px;
+    margin-bottom:30px;  
+}
+
+.textbox:focus{
+    outline:none;
+    border:rgba(24,149,215,1) 2px solid;
+ 
+    color:rgba(24,149,215,1);
+}
+
+#signUpButton, #signInButton{
+    height:50px;
+    width:100%;
+    border-radius:3px;
+    border:rgba(0,0,0,.3) 0px solid;
+    box-sizing:border-box;
+    padding:10px;
+    background:#90c843;
+    color:#FFF;
+    font-family: 'Open Sans', sans-serif;  
+    font-weight:400;
+    font-size: 16pt;
+    transition:background .4s;
+    cursor:pointer;
+}
+
+#signUpButton:hover, #signInButton:hover{
+    background:#80b438;
+}
+
+main {
+    width: 500px;
+    margin: 10px auto;
+}
+
+h1, h3, #addTodoInput{
+    text-align: center;
+}
+
+.editSectionProject {
+    display: none;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    left: 0; right: 0; 
+    top: 0; bottom: 0; 
+    z-index: -1; 
+    background: url('/public/img/bg1.jpeg') center / cover no-repeat;
+    filter: blur(5px); 
+}
+
+.todoWrapper {
+    margin-top: 10px;
+}
+
+#addTodoInput {
+    margin: 5px 0;
+    width: 100%;
+    font-size: 13px;
+    margin-right: 0;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 8px;
+}
+
+.heading {
+    position: relative;
+    border-radius: 3px;
+    background: rgb(85,131,194);
+    background: linear-gradient(180deg, rgba(85,131,194,1) 0%, rgba(9,9,121,1) 100%, rgba(0,212,255,1) 100%, rgba(55,93,155,1) 100%);
+    padding: 10px 5px;
+}
+
+.heading:hover .editProject, 
+.heading:hover .removeProject{
+    position: absolute;
+    cursor: pointer;
+    display: inline;
+    color: white;
+}
+
+.heading .editProject {
+    top: 13px;
+    right: 30px;
+    display: none;
+}
+
+.heading .removeProject {
+    top: 13px;
+    right: 10px;
+    display: none;
+}
+
+.heading .nameProject {
+    color: white;
+}
+
+.inputNewTask {
+    background-color: #d3d3d3;
+    padding: 10px 5px;
+}
+
+.inputNewTask .plus {
+    color: #589171;
+}
+
+.inputTask {
+    width: 78%;
+    font-size: 13px;
+    margin-right: 0;
+	padding: 6px 0 4px 10px;
+	border: 1px solid #cecece;
+	background: #F6F6f6;
+	border-radius: 8px;
+}
+.addTaskButton {
+    outline: none;
+    border: none;
+    color: white;
+    padding: 5px;
+    background: linear-gradient(180deg, #8bc2a5 0%, #518869 100%);
+}
+
+.tasks {
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.tasks div {
+    display: inline-block;
+}
+.tasks .wrapperTask {
+    width: 100%;
+}
+
+.tasks .nameSection {
+    width: 70%;
+}
+
+.tasks .editSection {
+    display: none;
+    padding: 10px;
+    width: 380px;
+}
+
+.tasks .editSection [type=text]{
+    width: 155px;
+}
+
+.tasks .editSection [type=datetime-local]{
+    width: 200px;
+}
+
+.tasks .changeSection{
+    position: relative;
+}
+
+.tasks .nameSection, 
+.tasks .doneSection,
+.tasks .changeSection {
+    padding: 10px;
+}
+
+.changeSection i {
+    position: relative;
+    display: none;
+    color: #b8b8ac;
+}
+
+.priorityDecrease {
+    top: 3px;
+}
+
+.priorityIncrease {
+    top: -2px;
+    right: 14px
+}
+
+.editTask {
+    right: 5px;
+}
+
+.removeTask {
+    right: 0;
+}
+
+.wrapperTask:hover {
+    background-color: #fcfed5;
+    border-radius: 0 0 10px 10px;
+}
+
+.wrapperTask:hover i {
+    display: inline;
+}
+
+#addTodoButton {
+    display: inline-block;
+    margin-left: 200px;
+    background: linear-gradient(180deg, #5187bb 0%, #385e9f 100%);
+    color: white;
+    outline: none;
+    padding: 10px;
+    border: none;
+}
