@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
-const should = chai.should();
 const fetch = require("node-fetch");
 const { ObjectId } = require('mongodb');
 
@@ -34,33 +33,47 @@ async function postData(url = '', data = {}) {
   return await response.json(); 
 }
 
-describe('Tasks', () => {
-    before((done) => {
-      Users.remove({}, (err)=>{
-        bcrypt.hash(userData.password, 10, (err, hash) => {
-          createdUser = new Users({
-              _id: new mongoose.Types.ObjectId(),
-              email: userData.email,
-              password: hash
-          });
-  
-          createdUser
-          .save()
-          .then(user => {
-            postData('http://localhost:3000/users/signin', {email: userData.email, password: userData.password})
-            .then(res => {
-              token = res.token
-              Tasks.remove({user: user}, (err) => { 
-                done()
-              });
-            })
-            .catch()  
-          })
-          .catch()
+describe('test all backend functionality', () => {
+  before((done) => {
+    Users.remove({}, (err)=>{
+      bcrypt.hash(userData.password, 10, (err, hash) => {
+        createdUser = new Users({
+            _id: new mongoose.Types.ObjectId(),
+            email: userData.email,
+            password: hash
         });
-      })
-    });
- 
+
+        createdUser
+        .save()
+        .then(user => {
+          postData('http://localhost:3000/users/signin', {email: userData.email, password: userData.password})
+          .then(res => {
+            token = res.token
+            Tasks.remove({user: user}, (err) => { 
+              done()
+            });
+          })
+          .catch()  
+        })
+        .catch()
+      });
+    })
+  });
+  
+  describe('/GET projects', () => {
+    it('it should GET all the projects', (done) => {
+      chai.request(server)
+          .get('/projects')
+          .set('authorization', 'Bearer ' + token)
+          .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('array');
+              res.body.length.should.be.eql(0);
+            done();
+          });
+      });
+  });
+
   describe('/GET tasks', () => {
       it('it should GET all the tasks', (done) => {
         chai.request(server)
@@ -90,7 +103,7 @@ describe('Tasks', () => {
               res.should.have.status(206);
               res.body.should.be.a('object');
               res.body.should.have.property('message');
-              res.body.message.should.be.eql("invalid fiel of request");
+              res.body.message.should.be.eql("invalid field of request");
             done();
           });
     });
@@ -115,6 +128,25 @@ describe('Tasks', () => {
             done();
           });
     });
+
+    describe('/POST project', () => {
+      it('it should POST a project ', (done) => {
+        const task = {
+          name: "Another name of super project"
+        }
+  
+        chai.request(server)
+            .post('/projects')
+            .set("authorization", "Bearer " + token)
+            .send(task)
+            .end((err, res) => {
+                res.should.have.status(201);
+                res.body.should.be.a('object');
+                res.body.should.have.property('message').eql('OK');
+                res.body.should.have.property('id')
+              done();
+            });
+      });
 
   describe('/GET/:id task', () => {
     it('it should GET a task by the given id', (done) => {
@@ -162,6 +194,34 @@ describe('Tasks', () => {
       })
     });
   })
+
+  describe('/GET/:id project', () => {
+    it('it should GET a project by the given id', (done) => {
+      const projectObject = new Projects({
+        _id: new mongoose.Types.ObjectId(),
+        name: "test",
+        user: createdUser
+      });
+
+      projectObject
+      .save()
+      .then(project => {
+        chai.request(server)
+          .get('/projects/' + project.id)
+          .set("authorization", "Bearer " + token)
+          .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+              res.body.should.have.property('name');
+              res.body.should.have.property('user');
+              res.body.should.have.property('_id').eql(project.id);
+            done();
+          })
+        })
+        .catch()
+    })
+  });
+
   
   describe('/PUT/:id task', () => {
     it('it should UPDATE a task given the id', (done) => {
@@ -212,6 +272,35 @@ describe('Tasks', () => {
     })
   });
 
+  describe('/PUT/:id project', () => {
+    it('it should UPDATE a project given the id', (done) => {
+      const projectObject = new Projects({
+        _id: new mongoose.Types.ObjectId(),
+        name: "test",
+        user: createdUser
+      });
+
+      projectObject
+      .save()
+      .then(project => {
+        chai.request(server)
+        .put('/tasks/' + project._id)
+        .set("authorization", "Bearer " + token)
+        .send([
+          {propName: "name", value: "another another super duper project"}
+        ])
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.result.should.have.property('ok').eql(1);
+          res.body.result.should.have.property('n').eql(0);
+          done();
+          })
+        })
+        .catch() 
+      })
+  });
+
   describe('/DELETE/:id task', () => {
     it('it should DELETE a task given the id', (done) => {
       const projectObject = new Projects({
@@ -253,6 +342,80 @@ describe('Tasks', () => {
         .catch()
     })
   });
-})
 
+  describe('/DELETE project', () => {
+    it('it should DELETE a project given the id', (done) => {
+      const projectObject = new Projects({
+        _id: new mongoose.Types.ObjectId(),
+        name: "test",
+        user: createdUser
+      });
+
+      projectObject
+      .save()
+      .then(project => {
+        chai.request(server)
+        .delete('/projects/' + project._id)
+        .set("authorization", "Bearer " + token)
+        .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.message.should.eql("OK");
+            res.body.result.should.have.property('ok').eql(1);
+            res.body.result.should.have.property('n').eql(1);
+            done();
+          })
+        })
+        .catch()
+      })
+    });
+  })
+
+  describe('/SIGNUP users', () => {
+    it('it should signup a user', (done) => {
+
+      chai.request(server)
+        .post('/users/signup')
+        .send({email: "qwerty12345@gmail.com", password: "123"})
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          res.body.message.should.eql("User has been created");
+          done();
+        })
+
+    })
+  })
+
+  describe('/SIGNIN users', () => {
+    it('it should signin a user', (done) => {
+      let newUser = null;
+
+      bcrypt.hash("123", 10, (err, hash) => {
+        newUser = new Users({
+        _id: new mongoose.Types.ObjectId(),
+        email: 'qwerty@gmail.com',
+        password: hash
+      });
+        
+      newUser
+      .save()
+      .then(project => {
+        chai.request(server)
+        .post('/users/signin')
+        .send({email: "qwerty@gmail.com", password: "123"})
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.message.should.eql("Auth success");
+          res.body.should.have.property("token");
+          done();
+        })
+      })
+      .catch()
+      })
+    })
+    
+  })
+})
 

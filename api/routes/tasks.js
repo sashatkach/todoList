@@ -81,7 +81,7 @@ routerTasks.post('/', checkAuth, (req, res, next) => {
                     })
                     .catch(err => {
                         return res.status(206).json({
-                            message: "invalid fiel of request"
+                            message: "invalid field of request"
                         })
                     });
             })
@@ -110,7 +110,6 @@ routerTasks.put('/:idTask', checkAuth, (req, res, next) => {
         if(ops.propName === 'deadline'){
             [date, time] = ops.value.split('T');
         }
-        console.log(ops.propName === 'deadline');
         if(ops.propName === 'deadline' && ((ops.value === '' || (date.search(/\d{1,2}-\d{1,2}-\d{4}/) === -1 
             && date.search(/\d{4}-\d{1,2}-\d{1,2}/) === -1)) || time.search(/\d{1,2}:\d{2}([ap]m)?/)) === -1){
                 return res.status(400).json({
