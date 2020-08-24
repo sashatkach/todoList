@@ -29,7 +29,6 @@ routerTasks.get('/:idTask', checkAuth, (req, res, next) => {
         .select('name deadline priority done')
         .exec()
         .then(doc => {
-            console.log(doc);
             if(doc)
             {
                 return res.status(200).json(doc);
@@ -37,7 +36,6 @@ routerTasks.get('/:idTask', checkAuth, (req, res, next) => {
             return res.status(404).json({message: "No valid entry foun for provided ID"});
         })
         .catch(err => {
-            console.log(err);
             return res.status(500).json({error: err});
         });
 });
@@ -48,6 +46,7 @@ routerTasks.post('/', checkAuth, (req, res, next) => {
     const done = req.body.done;
     const projectId = req.body.projectId;
     let priority = 1;
+    //need to valid only name because other fields predefined
     if(name !== '' && name.search(/^[а-яА-ЯёЁa-zA-Z0-9 ,!?]+$/) !== -1){
         Users.findOne({_id: req.userData.userId})
         .exec()
@@ -80,7 +79,11 @@ routerTasks.post('/', checkAuth, (req, res, next) => {
                             id: task._id
                         })
                     })
-                    .catch(err => console.log(err));
+                    .catch(err => {
+                        return res.status(206).json({
+                            message: "invalid fiel of request"
+                        })
+                    });
             })
             .catch(err => console.log(err));
         })
@@ -110,7 +113,6 @@ routerTasks.put('/:idTask', checkAuth, (req, res, next) => {
         console.log(ops.propName === 'deadline');
         if(ops.propName === 'deadline' && ((ops.value === '' || (date.search(/\d{1,2}-\d{1,2}-\d{4}/) === -1 
             && date.search(/\d{4}-\d{1,2}-\d{1,2}/) === -1)) || time.search(/\d{1,2}:\d{2}([ap]m)?/)) === -1){
-                console.log("work");
                 return res.status(400).json({
                     message: 'Deadline invalid'
                 });
@@ -119,12 +121,13 @@ routerTasks.put('/:idTask', checkAuth, (req, res, next) => {
         updateOps[ops.propName] = ops.value;
     }
 
-    console.log(updateOps);
-
     Tasks.updateOne({_id:id, user:req.userData.userId}, {$set: updateOps})
     .exec()
     .then(result => {
-        return res.status(200).json(result);
+        return res.status(200).json({
+            message: "OK",
+            result: result,
+        });
     })
     .catch(err => {
         return res.status(500).json({
@@ -138,7 +141,10 @@ routerTasks.delete('/:idTask', checkAuth, (req, res, next) => {
     Tasks.remove({_id: id, user: req.userData.userId})
     .exec()
     .then(result => {
-        return res.status(200).json(result);
+        return res.status(200).json({
+            message: "OK",
+            result: result,
+        });
     })
     .catch(err => {
         return res.status(500).json({

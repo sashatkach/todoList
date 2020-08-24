@@ -51,7 +51,7 @@ routerUser.post('/signup', (req, res, next) => {
     }
 });
 
-routerUser.post('/login', (req, res, next) =>{
+routerUser.post('/signin', (req, res, next) =>{
     const email = req.body.email;
     if(email.search(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/) !== -1){
         Users.find({email: email})

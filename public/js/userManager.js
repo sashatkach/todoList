@@ -78,7 +78,7 @@ const userManager = (function(){
                 if($(email).val() !== '' 
                 && $(email).val().search(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/) !== -1)
                 $.ajax({
-                    url: "/users/login",
+                    url: "/users/signin",
                     type: "POST",
                     contentType: "application/json",
                     dataType: "json",

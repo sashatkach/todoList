@@ -52,13 +52,19 @@ routerProject.post('/', checkAuth, (req, res, next) => {
             });
             task
                 .save()
-                .then(result => {console.log(result)})
-                .catch(err => console.log(err));
-            res.status(201)
-                .json({
-                    message: 'OK',
-                    _id: task._id 
+                .then(result => {
+                    return res.status(201)
+                    .json({
+                        message: 'OK',
+                        _id: task._id 
+                    });
+                })
+                .catch(err => {
+                    return res.status(206).json({
+                        message: 'Field invalid'
+                    })
                 });
+            
         })   
         .catch(err => {
             console.log(err);
