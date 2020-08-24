@@ -46,8 +46,13 @@ routerTasks.post('/', checkAuth, (req, res, next) => {
     const done = req.body.done;
     const projectId = req.body.projectId;
     let priority = 1;
-    //need to valid only name because other fields predefined
-    if(name !== '' && name.search(/^[а-яА-ЯёЁa-zA-Z0-9 ,!?]+$/) !== -1){
+
+    const [date, time] = deadline.split('T');
+    console.log(date, time);
+    if(name !== '' && name.search(/^[а-яА-ЯёЁa-zA-Z0-9 ,!?]+$/) !== -1
+    && ((deadline !== '' && (date.search(/\d{1,2}-\d{1,2}-\d{4}/) !== -1 
+    || date.search(/\d{4}-\d{1,2}-\d{1,2}/) !== -1)) && time.search(/\d{1,2}:\d{2}([ap]m)?/) !== -1)
+    && Number.isInteger(priority) && typeof(done) === 'boolean'){
         Users.findOne({_id: req.userData.userId})
         .exec()
         .then(user => {
