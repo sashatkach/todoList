@@ -1,0 +1,33 @@
+get all statuses, not repeating, alphabetically ordered
+SELECT DISTINCT status FROM tasks ORDER BY status ASC;
+
+get the count of all tasks in each project, order by tasks count
+descending
+SELECT projects.id, projects.name, COUNT(*) FROM projects JOIN tasks ON tasks.project_id = projects.id GROUP BY projects.id ORDER BY COUNT(*) DESC;
+
+get the count of all tasks in each project, order by projects
+names
+SELECT projects.id, projects.name, COUNT(*) FROM projects JOIN tasks ON tasks.project_id = projects.id GROUP BY projects.id ORDER BY projects.name ASC;
+
+get the tasks for all projects having the name beginning with
+"N" letter
+SELECT * FROM tasks WHERE name LIKE 'N%';
+
+get the list of all projects containing the 'a' letter in the middle of
+the name, and show the tasks count near each project. Mention
+that there can exist projects without tasks and tasks with project_id = NULL
+SELECT projects.name as name, COUNT(*) as count FROM projects RIGHT JOIN tasks ON tasks.project_id = projects.id GROUP BY name HAVING name LIKE '%a%' UNION SELECT projects.name as name, COUNT(*) as count FROM projects LEFT JOIN tasks ON tasks.project_id = projects.id GROUP BY name HAVING name LIKE '%a%';
+
+get the list of tasks with duplicate names. Order alphabetically
+SELECT name, COUNT(name) AS count FROM tasks GROUP BY name HAVING count > 1 ORDER BY name ASC;
+
+get list of tasks having several exact matches of both name and
+status, from the project 'Garage'. Order by matches count
+SELECT * FROM tasks JOIN (SELECT id, name FROM projects WHERE name ="garage") as work ON tasks.project_id = work.id WHERE tasks.name IN (SELECT name FROM tasks GROUP BY name  HAVING COUNT(*) >1) AND tasks.status IN (SELECT status FROM tasks GROUP BY status HAVING COUNT(*) >1) ORDER BY tasks.name;
+
+get the list of project names having more than 10 tasks in status
+'completed'. Order by project_id
+SELECT projects.name, COUNT(tasks.project_id) as count FROM projects JOIN tasks ON tasks.project_id = projects.id GROUP BY projects.id HAVING count > 10 ORDER BY tasks.project_id ASC;
+
+
+
