@@ -130,7 +130,7 @@ routerTasks.put('/:idTask', checkAuth, (req, res, next) => {
 
         if(ops.propName === 'done' && typeof(done) === 'boolean'){
             return res.status(400).json({
-                message: 'Done is valid',
+                message: 'Done invalid',
             })
         }
         updateOps[ops.propName] = ops.value;
