@@ -84,18 +84,14 @@ routerTasks.post('/', checkAuth, (req, res, next) => {
                             id: task._id
                         })
                     })
-                    .catch(err => {
-                        return res.status(206).json({
-                            message: "invalid field of request"
-                        })
-                    });
+                    .catch();
             })
             .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
     } else {
         return res.status(400).json({
-            message: "Validation of request data fails",
+            message: "Validation of request data fails or invalid field of request",
         });
     }
 });
@@ -122,7 +118,7 @@ routerTasks.put('/:idTask', checkAuth, (req, res, next) => {
                 });
         }
 
-        if(ops.propName === 'priority' && !Number.isInteger(ops.value)){
+        if(ops.propName === 'priority' && Number.isInteger(ops.value)){
             return res.status(400).json({
                 message: 'Priority invalid'
             })

@@ -4,6 +4,7 @@ const Projects = require('../api/models/project');
 const Users = require('../api/models/user');
 const bcrypt = require('bcrypt');
 const chai = require('chai');
+const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const fetch = require("node-fetch");
@@ -100,10 +101,10 @@ describe('test all backend functionality', () => {
           .set("authorization", "Bearer " + token)
           .send(task)
           .end((err, res) => {
-              res.should.have.status(206);
+              res.should.have.status(400);
               res.body.should.be.a('object');
               res.body.should.have.property('message');
-              res.body.message.should.be.eql("invalid field of request");
+              res.body.message.should.be.eql("Validation of request data fails or invalid field of request");
             done();
           });
     });
@@ -253,9 +254,9 @@ describe('test all backend functionality', () => {
           .send([
             {propName: "name", value: "another another super duper task"}, 
             {propName: "deadline", value: "2020-09-23T18:17:24.959+00:00"}, 
-            {propName: "done", value: true},
-            {propName: "priority", value: 20},
-            {propName: "projectId", value: project._id}
+            {propName: "done", value: "true"},
+            {propName: "priority", value: "20"},
+            {propName: "projectId", value: project._id+""}
           ])
           .end((err, res) => {
             res.should.have.status(200);
