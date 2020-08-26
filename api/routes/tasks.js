@@ -120,7 +120,18 @@ routerTasks.put('/:idTask', checkAuth, (req, res, next) => {
                 return res.status(400).json({
                     message: 'Deadline invalid'
                 });
-            
+        }
+
+        if(ops.propName === 'priority' && !Number.isInteger(ops.value)){
+            return res.status(400).json({
+                message: 'Priority invalid'
+            })
+        }
+
+        if(ops.propName === 'done' && typeof(done) === 'boolean'){
+            return res.status(400).json({
+                message: 'Done is valid',
+            })
         }
         updateOps[ops.propName] = ops.value;
     }
